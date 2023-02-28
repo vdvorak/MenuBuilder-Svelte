@@ -1,9 +1,15 @@
 import { writable, derived, get } from "svelte/store"
 
 class Store {
-  constructor(initData) {
-    this.store = writable(initData)
-    this.defaultData = JSON.parse(JSON.stringify(initData))
+  constructor(initMethod) {
+    this._store = writable({})
+    this.loaded = writable(false)
+
+    initMethod((data) => {
+      this._store.set(data)
+      this.defaultData = JSON.parse(JSON.stringify(data))
+      this.loaded.set(true)
+    })
   }
 
   setValue(path, value) {
@@ -12,11 +18,11 @@ class Store {
 
     path.slice(0, -1).reduce((acc, key) => acc[key], target)[lastKey] = value
 
-    this.store.set(target)
+    this._store.set(target)
   }
 
   getValue(path) {
-    return derived(this.store, ($data) =>
+    return derived(this._store, ($data) =>
       path.reduce((obj, key) => obj && obj[key], $data)
     )
   }
@@ -41,7 +47,11 @@ class Store {
   }
 
   getData() {
-    return derived(this.store, ($data) => $data)
+    return derived(this._store, ($data) => $data)
+  }
+
+  subscribe(run) {
+    this._store.subscribe(run)
   }
 }
 

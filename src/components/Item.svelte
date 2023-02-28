@@ -1,4 +1,5 @@
 <script>
+  import DeleteButton from "./DeleteButton.svelte"
   import FormInput from "./FormInput.svelte"
 
   export let store
@@ -16,6 +17,5 @@
   />
   <FormInput placeholder="Alergeny" {store} path={[...path, "alergens"]} />
   <FormInput placeholder="Jednotka" {store} path={[...path, "unit"]} />
-
-  <slot />
+  <DeleteButton {store} {path} />
 </div>

@@ -1,6 +1,7 @@
 <script>
   import Section from "./Section.svelte"
   import FormInput from "./FormInput.svelte"
+  import DeleteButton from "./DeleteButton.svelte"
 
   export let store
   export let path
@@ -22,6 +23,7 @@
 <div class="page">
   <div class="row">
     <FormInput className="page-title" {store} path={[...path, "title"]} />
+    <DeleteButton {store} {path} />
     <button on:click={(e) => add()}>Přidat sekci</button>
   </div>
   {#each $sections as section, i}
