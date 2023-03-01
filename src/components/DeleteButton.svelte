@@ -7,12 +7,12 @@
 
   let array
   $: {
-    array = store.getValue(xpath)
+    array = store.getRef(xpath)
   }
 </script>
 
 <button
+  class="delete"
   on:click={(e) =>
-    store.setValue(xpath, [...$array.filter((e, i) => i != index)])}
-  >&#10060;</button
+    store.setValue(xpath, [...$array.filter((e, i) => i != index)])}>❌</button
 >

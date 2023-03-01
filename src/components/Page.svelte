@@ -10,21 +10,21 @@
     store.setValue(
       [...path, "sections"],
       [
-        ...store.getValueCopy([...path, "sections"]),
+        ...store.getValue([...path, "sections"]),
         { title: "Added section", items: [] },
       ]
     )
   }
 
   let sections
-  $: sections = store.getValue([...path, "sections"])
+  $: sections = store.getRef([...path, "sections"])
 </script>
 
 <div class="page">
   <div class="row">
     <FormInput className="page-title" {store} path={[...path, "title"]} />
-    <DeleteButton {store} {path} />
     <button on:click={(e) => add()}>Přidat sekci</button>
+    <DeleteButton {store} {path} />
   </div>
   {#each $sections as section, i}
     <Section {store} path={[...path, "sections", i]} />

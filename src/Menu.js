@@ -1,11 +1,11 @@
-export function importData(e, callback) {
+export function importData(file, callback) {
   const reader = new FileReader()
   reader.onload = callback
-  reader.readAsText(e.target.files[0])
+  reader.readAsText(file)
 }
 
 export function getJsonLink(pages) {
-  save()
+  save(pages)
   const blob = new Blob([JSON.stringify(pages)], {
     type: "application/json;charset=utf-8;",
   })
@@ -13,7 +13,7 @@ export function getJsonLink(pages) {
 }
 
 export function getTextFileLink(pages) {
-  save()
+  save(pages)
   let data = ""
   pages.forEach((page, i) => {
     data += (i > 0 ? "\n\n\n" : "") + page.title + "\n\n"
@@ -35,7 +35,7 @@ export function getTextFileLink(pages) {
 }
 
 export function createPDF(pages) {
-  save()
+  save(pages)
   fetch("menu.php", {
     method: "POST",
     headers: {

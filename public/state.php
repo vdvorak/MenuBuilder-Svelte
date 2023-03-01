@@ -16,5 +16,10 @@ if($data->requestId == "upload") {
 }
 
 if($data->requestId == "download") {
-  echo file_get_contents("menu.json");
+  if (!file_exists("menu.json")) {
+   echo json_encode([]);
+  }
+  else {
+    echo file_get_contents("menu.json");
+  }
 }

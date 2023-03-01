@@ -5,10 +5,12 @@
   export let placeholder = ""
   export let type = "text"
 
-  $: value = store.getValue(path)
+  $: value = store.getRef(path)
 </script>
 
 <input
+  name={path.join("-")}
+  id={path.join("-")}
   {placeholder}
   {type}
   class={className}

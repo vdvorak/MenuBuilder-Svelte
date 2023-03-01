@@ -1,7 +1,14 @@
 <script>
   import Page from "./components/Page.svelte"
   import Store from "./Store.js"
-  import { importData, getTextFileLink, loadData } from "./Menu.js"
+  import {
+    importData,
+    getTextFileLink,
+    loadData,
+    getJsonLink,
+    createPDF,
+  } from "./Menu.js"
+  import UploadButton from "./components/UploadButton.svelte"
 
   const store = new Store(loadData)
 
@@ -10,17 +17,14 @@
   $: {
     loaded = store.loaded
     if ($loaded) {
-      pages = store.getValue(["pages"])
+      pages = store.getRef(["pages"])
     }
   }
 
   function add(e) {
     store.setValue(
       ["pages"],
-      [
-        this._store.getValueCopy(["pages"]),
-        { title: "Nová stránka", sections: [] },
-      ]
+      [...$pages, { title: "Nová stránka", sections: [] }]
     )
   }
 </script>
@@ -28,13 +32,33 @@
 {#if $loaded}
   <div class="header">
     <div class="container">
-      <input
-        type="file"
-        on:change={(e) =>
-          importData(e, store.setValue(["pages"], JSON.parse(e.target.result)))}
-      />
-      <button on:click={add}>Přidat stránku</button>
-      <a download="menu.txt" href={getTextFileLink($pages)}>Txt</a>
+      <div class="exports">
+        <div class="row">
+          <UploadButton
+            label="Import"
+            on:upload={(e) => {
+              importData(e.detail.target.files[0], (data) =>
+                store.setValue(["pages"], JSON.parse(data.target.result))
+              )
+            }}
+          />
+          <a class="data-color" download="menu.json" href={getJsonLink($pages)}
+            >Export</a
+          >
+        </div>
+
+        <div class="row">
+          <a
+            class="data-color"
+            download="menu.txt"
+            href={getTextFileLink($pages)}>.txt</a
+          >
+          <button class="data-color" on:click={(e) => createPDF($pages)}
+            >.pdf</button
+          >
+        </div>
+      </div>
+      <div class="row"><button on:click={add}>Přidat stránku</button></div>
     </div>
   </div>
   {#each $pages as page, i}

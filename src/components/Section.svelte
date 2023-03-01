@@ -11,7 +11,7 @@
     store.setValue(
       [...path, "items"],
       [
-        ...store.getValueCopy([...path, "items"]),
+        ...store.getValue([...path, "items"]),
         {
           before: Defaults.BEFORE[lastIndex],
           title: "",
@@ -24,13 +24,19 @@
   }
 
   let items
-  $: items = store.getValue([...path, "items"])
+  $: items = store.getRef([...path, "items"])
 </script>
 
 <div class="section">
-  <FormInput className="section-title" {store} path={[...path, "title"]} />
+  <div class="section-row">
+    <FormInput className="section-title" {store} path={[...path, "title"]} />
+    <button on:click={(e) => add($items.length)}>Přidat položku</button>
+    <div class="checkbox">
+      <FormInput type="checkbox" {store} path={[...path, "beforeAsServing"]} />
+      <label for={[...path, "beforeAsServing"].join("-")}>Porce</label>
+    </div>
+  </div>
   <DeleteButton {store} {path} />
-  <button on:click={(e) => add($items.length)}>Přidat položku</button>
   {#each $items as item, i}
     <Item {store} path={[...path, "items", i]} />
   {/each}

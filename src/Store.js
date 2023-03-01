@@ -21,14 +21,14 @@ class Store {
     this._store.set(target)
   }
 
-  getValue(path) {
+  getRef(path) {
     return derived(this._store, ($data) =>
       path.reduce((obj, key) => obj && obj[key], $data)
     )
   }
 
-  getValueCopy(path) {
-    return get(this.getValue(path))
+  getValue(path) {
+    return get(this.getRef(path))
   }
 
   getDefaultValue(path) {
